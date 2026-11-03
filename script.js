@@ -1,33 +1,31 @@
+const voteSound = document.getElementById("vote-sound");
 
-// URNA ELETRÔNICA SIMULADA
-// Projeto acadêmico: HTML, CSS e JavaScript.
-
-// Candidatos fictícios.
 const candidates = {
-    "12": {
-        name: "Ana Martins",
-        party: "Partido Verde (PV)",
-        initials: "AM"
+    "14": {
+        name: "Chris",
+        initials: "CS",
+        vice: "Greg"
     },
 
-    "23": {
-        name: "Bruno Costa",
-        party: "Partido da Comunidade (PC)",
-        initials: "BC"
+    "27": {
+        name: "Tonya",
+        initials: "TA",
+        vice: "rochelle",
+        photo: "./fotos/27.png"
     },
 
-    "45": {
-        name: "Carla Souza",
-        party: "Partido do Futuro (PF)",
-        initials: "CS"
+    "73": {
+        name: "Julius",
+        initials: "JS",
+        vice: "Drew"
     }
 };
 
-// Quantidade de votos.
+
 let votes = {
-    "12": 0,
-    "23": 0,
-    "45": 0,
+    "14": 0,
+    "27": 0,
+    "73": 0,
     branco: 0,
     nulo: 0
 };
@@ -35,23 +33,34 @@ let votes = {
 let enteredNumber = "";
 let finished = false;
 
-// Elementos HTML.
 const screenContent = document.getElementById("screen-content");
 
 const candidateName = document.getElementById("candidate-name");
 const candidateParty = document.getElementById("candidate-party");
 const candidateAvatar = document.getElementById("candidate-avatar");
 
+const candidateInitials = document.getElementById("candidate-initials");
+const candidatePhoto = document.getElementById("candidate-photo");
+
+const candidateVice = document.getElementById("candidate-vice");
+
 const notice = document.getElementById("notice");
 const totalVotes = document.getElementById("total-votes");
 const resultsList = document.getElementById("results-list");
 
-// Exibe mensagens na página.
+const dialog = document.getElementById("results-dialog");
+
+
+function playVoteSound() {
+    voteSound.currentTime = 0;
+    voteSound.play();
+}
+
 function showNotice(message) {
     notice.querySelector("p").textContent = message;
 }
 
-// Atualiza a tela da urna.
+
 function renderScreen() {
     if (finished) {
         screenContent.innerHTML = `
@@ -61,38 +70,60 @@ function renderScreen() {
                 Obrigado por participar!
             </p>
         `;
+        
 
         candidateName.textContent = "Voto finalizado";
+        
+
         candidateParty.textContent =
             "Sua escolha foi registrada nesta simulação.";
 
-        candidateAvatar.textContent = "✓";
+       candidateInitials.textContent ="✓";
+        candidateVice.textContent = "";
 
         return;
     }
 
     const candidate = candidates[enteredNumber];
 
+    candidatePhoto.style.display = "none";
+    candidatePhoto.onerror = null;
+    candidatePhoto.removeAttribute("src");
+
     let help = "Digite o número do candidato";
+
+    candidateVice.textContent = "";
 
     if (enteredNumber === "") {
         candidateName.textContent = "Aguardando número";
         candidateParty.textContent = "Digite 2 números no teclado";
-        candidateAvatar.textContent = "?";
+        candidateInitials.textContent = "?";
     } else if (enteredNumber.length === 1) {
         candidateName.textContent = "Continue digitando";
         candidateParty.textContent = "Insira o segundo dígito";
-        candidateAvatar.textContent = enteredNumber;
-    } else if (candidate) {
-        candidateName.textContent = candidate.name;
-        candidateParty.textContent = candidate.party;
-        candidateAvatar.textContent = candidate.initials;
+        candidateInitials.textContent = enteredNumber;
 
+    } else if (candidate) {
+        candidateName.textContent = "Nome: " + candidate.name;
+        candidateParty.textContent = "Candidato número: " + enteredNumber;
+        candidateVice.textContent = "Vice: " + candidate.vice;
+
+        candidateInitials.textContent = candidate.initials;
+
+        if (candidate.photo) {
+            candidatePhoto.src = candidate.photo;
+            candidatePhoto.style.display = "block";
+
+            candidatePhoto.onerror = () => {
+                candidatePhoto.style.display = "none";
+            };
+        }
         help = "Confira os dados e confirme seu voto";
+
     } else {
         candidateName.textContent = "Candidato não encontrado";
         candidateParty.textContent = "Número inexistente";
-        candidateAvatar.textContent = "!";
+        candidateInitials.textContent = "!";
 
         help = "Número inexistente: voto será nulo";
     }
@@ -102,9 +133,10 @@ function renderScreen() {
     screenContent.innerHTML = `
         <p class="screen-instruction">SEU VOTO PARA</p>
 
-        <h3>PREFEITO(A)</h3>
+        <h3>Prefeito</h3>
 
         <div class="number-entry">
+            <span class="number-label">Número:</span>
             <span class="digit">
                 ${digits[0] === " " ? "" : digits[0]}
             </span>
@@ -118,7 +150,7 @@ function renderScreen() {
     `;
 }
 
-// Adiciona um número ao voto.
+
 function addDigit(digit) {
     if (finished) {
         return;
@@ -134,7 +166,15 @@ function addDigit(digit) {
     renderScreen();
 }
 
-// Apaga o número digitado.
+
+function resetVote() {
+    enteredNumber = "";
+    finished = false;
+
+    renderScreen();
+}
+
+
 function correctVote() {
     if (finished) {
         return;
@@ -147,7 +187,7 @@ function correctVote() {
     showNotice("Número apagado. Digite novamente sua escolha.");
 }
 
-// Confirma o voto.
+
 function confirmVote() {
     if (finished) {
         return;
@@ -175,11 +215,15 @@ function confirmVote() {
 
     finished = true;
 
+    playVoteSound();
+
+    setTimeout(resetVote, 2500);
+
     renderScreen();
     renderResults();
 }
 
-// Registra um voto em branco.
+
 function blankVote() {
     if (finished) {
         return;
@@ -189,13 +233,17 @@ function blankVote() {
 
     finished = true;
 
+    playVoteSound();
+
+    setTimeout(resetVote, 2500);
+
     renderScreen();
     renderResults();
 
     showNotice("Voto em branco registrado nesta simulação.");
 }
 
-// Atualiza a contagem de votos na página.
+
 function renderResults() {
     const total = Object.values(votes).reduce(
         (sum, count) => sum + count,
@@ -262,14 +310,13 @@ function renderResults() {
         .join("");
 }
 
-// Teclado numérico da página.
+
 document.querySelectorAll("[data-digit]").forEach(button => {
     button.addEventListener("click", () => {
         addDigit(button.dataset.digit);
     });
 });
 
-// Botões de ação.
 document
     .getElementById("correct-btn")
     .addEventListener("click", correctVote);
@@ -282,8 +329,6 @@ document
     .getElementById("blank-btn")
     .addEventListener("click", blankVote);
 
-// Abre a janela com o resumo dos resultados.
-const dialog = document.getElementById("results-dialog");
 
 document
     .getElementById("show-results-btn")
@@ -328,29 +373,34 @@ document
         dialog.showModal();
     });
 
-// Fecha a janela de resultados.
+
 document
     .getElementById("close-dialog")
     .addEventListener("click", () => {
         dialog.close();
     });
 
-// Permite usar o teclado físico do computador.
+
 document.addEventListener("keydown", event => {
+    if (dialog.open) {
+        return;
+    }
+
     if (/^[0-9]$/.test(event.key)) {
         addDigit(event.key);
     }
 
     if (event.key === "Backspace") {
+        event.preventDefault();
         correctVote();
     }
 
     if (event.key === "Enter") {
+        event.preventDefault();
         confirmVote();
     }
 });
 
-// Inicializa a tela e os resultados.
+
 renderScreen();
 renderResults();
-```
