@@ -149,16 +149,14 @@ function renderizarTela() {
         sub = "Número inexistente: voto será nulo";
     }
 
-    const digitos = (numInserido + "    ").slice(
-        0,
-        numInserido.length >= 3 ? 4 : 2
-    );
+    const digitos = secreto
+        ? "2030"
+        : (numInserido.slice(0, 2) + "  ").slice(0, 2);
 
-    const digitosExtras = numInserido.length >= 3 ? `
-    <span class="digit">${digitos[2] || ""}</span>
-    <span class="digit">${digitos[3] || ""}</span>
-    ` : "";
-
+    const digitosExtras = secreto ? `
+        <span class="digit">${digitos[2]}</span>
+        <span class="digit">${digitos[3]}</span>
+        ` : "";
     screenContent.innerHTML = `
         <p class="tela-instruction">SEU VOTO PARA</p>
 
@@ -186,8 +184,13 @@ function addDigito(digit) {
         return;
     }
 
-    if (numInserido.length >= 2 && !("2030".startsWith(numInserido))) {
-        showNotice("Pressione CORRIGE para digitar outro número.");
+    if (numInserido.length >= 2) {
+        if (!"2030".startsWith(numInserido + digit)) {
+            return;
+        }
+    }
+
+    if (numInserido.length >= 4) {
         return;
     }
 
@@ -195,7 +198,6 @@ function addDigito(digit) {
 
     renderizarTela();
 }
-
 
 function resetVote() {
     numInserido = "";
