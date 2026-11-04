@@ -1,199 +1,217 @@
-const voteSound = document.getElementById("vote-sound");
-
-const candidates = {
+const candidatos = {
     "14": {
-        name: "Chris",
-        initials: "CS",
+        nome: "Chris",
+        inicias: "CS",
+        partido: "Brooklin",
         vice: "Greg"
     },
 
     "27": {
-        name: "Tonya",
-        initials: "TA",
-        vice: "rochelle",
-        photo: "./fotos/27.png"
+        nome: "Rochelle",
+        inicias: "RC",
+        partido: "Marido 2 Empregos",
+        vice: "Drew",
     },
 
     "73": {
-        name: "Julius",
-        initials: "JS",
-        vice: "Drew"
+        nome: "Julius",
+        partido: "Escala 7X0",
+        inicias: "JS",
+        vice: "Tonya"
     }
 };
 
+const candidatoSecreto = {
+    nome: "Super Xandão",
+    partido: "PRONA",
+    inicias: "SX",
+    vice: "Enéas Carneiro",
+    photo: "foto/super-xandao.jpg"
+};
 
-let votes = {
+const somUrna = document.getElementById("som-urna");
+
+function playsomUrna() {
+    somUrna.currentTime = 0;
+    somUrna.play();
+}
+
+const somSurpresa = document.getElementById("som-surpresa");
+
+function playSomSurpresa() {
+    somSurpresa.currentTime = 0;
+    somSurpresa.play();
+}
+
+
+let votos = {
     "14": 0,
     "27": 0,
     "73": 0,
+    "2030": 0,
     branco: 0,
     nulo: 0
 };
 
-let enteredNumber = "";
-let finished = false;
+let numInserido = "";
+let finalizar = false;
 
-const screenContent = document.getElementById("screen-content");
+const screenContent = document.getElementById("tela-content");
 
-const candidateName = document.getElementById("candidate-name");
-const candidateParty = document.getElementById("candidate-party");
-const candidateAvatar = document.getElementById("candidate-avatar");
+const candidatoNome = document.getElementById("candidato-nome");
+const candidatoParty = document.getElementById("candidato-party");
+const candidatoAvatar = document.getElementById("candidato-avatar");
+const candidatoVice = document.getElementById("candidato-vice");
 
-const candidateInitials = document.getElementById("candidate-initials");
-const candidatePhoto = document.getElementById("candidate-photo");
+const notifica = document.getElementById("notifica");
+const totalVotos = document.getElementById("total-votos");
+const resultList = document.getElementById("listaresultado");
 
-const candidateVice = document.getElementById("candidate-vice");
+const dialog = document.getElementById("resultado-dialogo");
 
-const notice = document.getElementById("notice");
-const totalVotes = document.getElementById("total-votes");
-const resultsList = document.getElementById("results-list");
-
-const dialog = document.getElementById("results-dialog");
-
-
-function playVoteSound() {
-    voteSound.currentTime = 0;
-    voteSound.play();
-}
 
 function showNotice(message) {
-    notice.querySelector("p").textContent = message;
+    notifica.querySelector("p").textContent = message;
 }
 
 
-function renderScreen() {
-    if (finished) {
+function renderizarTela() {
+    if (finalizar) {
         screenContent.innerHTML = `
-            <p class="screen-instruction">VOTAÇÃO</p>
+            <p class="tela-instruction">VOTAÇÃO</p>
             <h3>FIM</h3>
-            <p class="screen-help">
+            <p class="tela-help">
                 Obrigado por participar!
             </p>
         `;
         
 
-        candidateName.textContent = "Voto finalizado";
+        candidatoNome.textContent = "Voto finalizado";
         
 
-        candidateParty.textContent =
+        candidatoParty.textContent =
             "Sua escolha foi registrada nesta simulação.";
 
-       candidateInitials.textContent ="✓";
-        candidateVice.textContent = "";
+        candidatoAvatar.textContent = "✓";
+        candidatoVice.textContent = "";
 
         return;
     }
 
-    const candidate = candidates[enteredNumber];
+    const candidato = candidatos[numInserido];
 
-    candidatePhoto.style.display = "none";
-    candidatePhoto.onerror = null;
-    candidatePhoto.removeAttribute("src");
+    const secreto = numInserido === "2030";
 
-    let help = "Digite o número do candidato";
+    let sub = "Digite o número do candidato";
 
-    candidateVice.textContent = "";
+    candidatoVice.textContent = "";
 
-    if (enteredNumber === "") {
-        candidateName.textContent = "Aguardando número";
-        candidateParty.textContent = "Digite 2 números no teclado";
-        candidateInitials.textContent = "?";
-    } else if (enteredNumber.length === 1) {
-        candidateName.textContent = "Continue digitando";
-        candidateParty.textContent = "Insira o segundo dígito";
-        candidateInitials.textContent = enteredNumber;
+    if (numInserido === "") {
+        candidatoNome.textContent = "Aguardando número";
+        candidatoParty.textContent = "Digite 2 números no teclado";
+        candidatoAvatar.textContent = "?";
+    } else if (numInserido.length === 1) {
+        candidatoNome.textContent = "Continue digitando";
+        candidatoParty.textContent = "Insira o segundo dígito";
+        candidatoAvatar.textContent = numInserido;
 
-    } else if (candidate) {
-        candidateName.textContent = "Nome: " + candidate.name;
-        candidateParty.textContent = "Candidato número: " + enteredNumber;
-        candidateVice.textContent = "Vice: " + candidate.vice;
+    } else if (secreto) {
+        candidatoNome.textContent = "Nome: " + candidatoSecreto.nome;
+        candidatoParty.textContent = "Partido: " + candidatoSecreto.partido;
+        candidatoVice.textContent = "Vice: " + candidatoSecreto.vice;
+        candidatoAvatar.textContent = candidatoSecreto.inicias;
 
-        candidateInitials.textContent = candidate.initials;
+        sub = "Confira os dados e confirme seu voto";
+    } else if (candidato) {
+        candidatoNome.textContent = "Nome: " + candidato.nome;
+        candidatoParty.textContent = "Partido: " + candidatos[numInserido].partido;
+        candidatoVice.textContent = "Vice: " + candidato.vice;
+        candidatoAvatar.textContent = candidato.inicias;
 
-        if (candidate.photo) {
-            candidatePhoto.src = candidate.photo;
-            candidatePhoto.style.display = "block";
-
-            candidatePhoto.onerror = () => {
-                candidatePhoto.style.display = "none";
-            };
-        }
-        help = "Confira os dados e confirme seu voto";
-
+        sub = "Confira os dados e confirme seu voto";
     } else {
-        candidateName.textContent = "Candidato não encontrado";
-        candidateParty.textContent = "Número inexistente";
-        candidateInitials.textContent = "!";
+        candidatoNome.textContent = "Candidato não encontrado";
+        candidatoParty.textContent = "Número inexistente";
+        candidatoAvatar.textContent = "!";
 
-        help = "Número inexistente: voto será nulo";
+        sub = "Número inexistente: voto será nulo";
     }
 
-    const digits = (enteredNumber + "  ").slice(0, 2);
+    const digitos = (numInserido + "    ").slice(
+        0,
+        numInserido.length >= 3 ? 4 : 2
+    );
+
+    const digitosExtras = numInserido.length >= 3 ? `
+    <span class="digit">${digitos[2] || ""}</span>
+    <span class="digit">${digitos[3] || ""}</span>
+    ` : "";
 
     screenContent.innerHTML = `
-        <p class="screen-instruction">SEU VOTO PARA</p>
+        <p class="tela-instruction">SEU VOTO PARA</p>
 
-        <h3>Prefeito</h3>
+        <h3>Presidente</h3>
 
         <div class="number-entry">
             <span class="number-label">Número:</span>
             <span class="digit">
-                ${digits[0] === " " ? "" : digits[0]}
+                ${digitos[0] === " " ? "" : digitos[0]}
             </span>
 
             <span class="digit">
-                ${digits[1] === " " ? "" : digits[1]}
+                ${digitos[1] === " " ? "" : digitos[1]}
             </span>
+            ${digitosExtras}
         </div>
 
-        <p class="screen-help">${help}</p>
+        <p class="tela-help">${sub}</p>
     `;
 }
 
 
-function addDigit(digit) {
-    if (finished) {
+function addDigito(digit) {
+    if (finalizar) {
         return;
     }
 
-    if (enteredNumber.length >= 2) {
+    if (numInserido.length >= 2 && !("2030".startsWith(numInserido))) {
         showNotice("Pressione CORRIGE para digitar outro número.");
         return;
     }
 
-    enteredNumber += digit;
+    numInserido += digit;
 
-    renderScreen();
+    renderizarTela();
 }
 
 
 function resetVote() {
-    enteredNumber = "";
-    finished = false;
+    numInserido = "";
+    finalizar = false;
 
-    renderScreen();
+    renderizarTela();
 }
 
 
 function correctVote() {
-    if (finished) {
+    if (finalizar) {
         return;
     }
 
-    enteredNumber = "";
+    numInserido = "";
 
-    renderScreen();
+    renderizarTela();
 
     showNotice("Número apagado. Digite novamente sua escolha.");
 }
 
 
 function confirmVote() {
-    if (finished) {
+    if (finalizar) {
         return;
     }
 
-    if (enteredNumber.length !== 2) {
+    if (numInserido.length < 2) {
         showNotice(
             "Digite os dois números antes de confirmar, ou escolha BRANCO."
         );
@@ -201,43 +219,51 @@ function confirmVote() {
         return;
     }
 
-    if (candidates[enteredNumber]) {
-        votes[enteredNumber]++;
+    if (numInserido === "2030") {
+    votos["2030"]++;
+    showNotice("Voto confirmado para Super Xandão!");
+
+    } else if (candidatos[numInserido]) {
+        votos[numInserido]++;
 
         showNotice(
-            `Voto simulado para ${candidates[enteredNumber].name} registrado com sucesso.`
+            `Voto simulado para ${candidatos[numInserido].nome} registrado com sucesso.`
         );
     } else {
-        votes.nulo++;
+        votos.nulo++;
 
         showNotice("Voto nulo registrado nesta simulação.");
     }
 
-    finished = true;
+    finalizar = true;
 
-    playVoteSound();
+    if (numInserido === "2030") {
+        playSomSurpresa();
+    } else {
+        playsomUrna();
+    }
 
     setTimeout(resetVote, 2500);
 
-    renderScreen();
+    renderizarTela();
     renderResults();
 }
 
 
-function blankVote() {
-    if (finished) {
+function brancovoto() {
+    if (finalizar) {
         return;
     }
 
-    votes.branco++;
+    votos.branco++;
 
-    finished = true;
+    finalizar = true;
 
-    playVoteSound();
+    playsomUrna();
 
     setTimeout(resetVote, 2500);
 
-    renderScreen();
+    renderizarTela();
     renderResults();
 
     showNotice("Voto em branco registrado nesta simulação.");
@@ -245,35 +271,41 @@ function blankVote() {
 
 
 function renderResults() {
-    const total = Object.values(votes).reduce(
+    const total = Object.values(votos).reduce(
         (sum, count) => sum + count,
         0
     );
 
-    totalVotes.textContent = total;
+    totalVotos.textContent = total;
 
     const labels = [
-        ...Object.entries(candidates).map(([number, candidate]) => ({
+        ...Object.entries(candidatos).map(([number, candidato]) => ({
             number,
-            name: candidate.name,
-            count: votes[number]
+            nome: candidato.nome,
+            count: votos[number]
         })),
 
         {
+            number: "2030",
+            nome: candidatoSecreto.nome,
+            count: votos["2030"]
+        },
+
+        {
             number: "BRANCO",
-            name: "Votos em branco",
-            count: votes.branco
+            nome: "Votos em branco",
+            count: votos.branco
         },
 
         {
             number: "NULO",
-            name: "Votos nulos",
-            count: votes.nulo
+            nome: "Votos nulos",
+            count: votos.nulo
         }
     ];
 
     if (total === 0) {
-        resultsList.innerHTML = `
+        resultList.innerHTML = `
             <p class="empty-results">
                 Os votos aparecerão aqui após a confirmação.
             </p>
@@ -282,7 +314,7 @@ function renderResults() {
         return;
     }
 
-    resultsList.innerHTML = labels
+    resultList.innerHTML = labels
         .filter(item => item.count > 0)
         .map(item => {
             const percentage = Math.round(
@@ -292,8 +324,8 @@ function renderResults() {
             return `
                 <div class="result-row">
 
-                    <span class="result-name">
-                        ${item.name}
+                    <span class="result-nome">
+                        ${item.nome}
                     </span>
 
                     <span class="result-number">
@@ -313,50 +345,56 @@ function renderResults() {
 
 document.querySelectorAll("[data-digit]").forEach(button => {
     button.addEventListener("click", () => {
-        addDigit(button.dataset.digit);
+        addDigito(button.dataset.digit);
     });
 });
 
 document
-    .getElementById("correct-btn")
+    .getElementById("corrige-btn")
     .addEventListener("click", correctVote);
 
 document
-    .getElementById("confirm-btn")
+    .getElementById("confirma-btn")
     .addEventListener("click", confirmVote);
 
 document
-    .getElementById("blank-btn")
-    .addEventListener("click", blankVote);
+    .getElementById("branco-btn")
+    .addEventListener("click", brancovoto);
 
 
 document
-    .getElementById("show-results-btn")
+    .getElementById("botaodemostrarresultados")
     .addEventListener("click", () => {
 
-        const total = Object.values(votes).reduce(
+        const total = Object.values(votos).reduce(
             (sum, count) => sum + count,
             0
         );
 
         const items = [
-            ...Object.entries(candidates).map(([number, candidate]) => ({
-                name: `${candidate.name} (${number})`,
-                count: votes[number]
+            ...Object.entries(candidatos).map(([number, candidato]) => ({
+                nome: `${candidato.nome} (${number})`,
+                count: votos[number]
             })),
 
             {
-                name: "Votos em branco",
-                count: votes.branco
+                nome: `${candidatoSecreto.nome} (2030)`,
+                count: votos["2030"]
+            },
+
+
+            {
+                nome: "Votos em branco",
+                count: votos.branco
             },
 
             {
-                name: "Votos nulos",
-                count: votes.nulo
+                nome: "Votos nulos",
+                count: votos.nulo
             }
         ];
 
-        document.getElementById("dialog-results").innerHTML = `
+        document.getElementById("dialogo").innerHTML = `
             <div class="dialog-result">
                 <strong>Total de votos</strong>
                 <strong>${total}</strong>
@@ -364,7 +402,7 @@ document
 
             ${items.map(item => `
                 <div class="dialog-result">
-                    <span>${item.name}</span>
+                    <span>${item.nome}</span>
                     <strong>${item.count}</strong>
                 </div>
             `).join("")}
@@ -375,7 +413,7 @@ document
 
 
 document
-    .getElementById("close-dialog")
+    .getElementById("fechar-dialogo")
     .addEventListener("click", () => {
         dialog.close();
     });
@@ -387,7 +425,7 @@ document.addEventListener("keydown", event => {
     }
 
     if (/^[0-9]$/.test(event.key)) {
-        addDigit(event.key);
+        addDigito(event.key);
     }
 
     if (event.key === "Backspace") {
@@ -402,5 +440,5 @@ document.addEventListener("keydown", event => {
 });
 
 
-renderScreen();
+renderizarTela();
 renderResults();
