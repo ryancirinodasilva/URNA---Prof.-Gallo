@@ -13,7 +13,7 @@
 
         <section class="intro">
             <div>
-                <p class="eyebrow">SIMULADOR DE VOTAÇÃO</p>
+                <p class="subtitulo">SIMULADOR DE VOTAÇÃO</p>
                 <h1>Seu voto!</h1>
                 <p class="intro-text">
                     Experimente uma votação simulada. Digite o número,
@@ -23,113 +23,109 @@
 
         </section>
 
-        <section class="voting-layout">
+        <section class="layout-votacao">
 
-            <div class="machine">
+            <div class="urna">
 
-                <div class="machine-heading">
+                <div class="urna-heading">
                     <div>
-                        <p class="eyebrow">ELEIÇÃO SIMULADA</p>
-                        <h2>Prefeito(a)</h2>
+                        <p class="subtitulo">ELEIÇÃO SIMULADA</p>
+                        <h2>Presidente(a)</h2>
                     </div>
   
                 </div>
 
                 <div class="urna-body">
 
-            <div class="screen">
+                    <div class="tela">
 
-                <div class="screen-top">
-                    <span>JUSTIÇA ELEITORAL</span>
-                    <span class="screen-indicator"></span>
-                </div>
+                        <div class="tela-top">
+                            <span>JUSTIÇA ELEITORAL</span>
+                            <span class="tela-indicator"></span>
+                        </div>
 
-                <div id="screen-content" class="screen-content"></div>
+                        <div id="tela-content" class="tela-content"></div>
 
-                <div class="candidate-preview">
+                        <div class="candidato-preview">
+                            <div class="candidato-avatar" id="candidato-avatar">?</div>
 
-                    <div class="candidate-details">
-                        <strong id="candidate-name">Aguardando número</strong>
-                        <span id="candidate-party">Digite 2 números no teclado</span>
-                        <span id="candidate-vice"></span>
+                            <div class="detalhes-candidato">
+                                <strong id="candidato-nome">Aguardando número</strong>
+                                <span id="candidato-party">Digite 2 números no teclado</span>
+                                <span id="candidato-vice"></span>
+                            </div>
+                        </div>
+
+                        <div class="tela-footer">
+                            <p>Aperte a tecla:</p>
+                            <p><b>CONFIRMA</b> para CONFIRMAR este voto</p>
+                            <p><b>CORRIGE</b> para REINICIAR este voto</p>
+                            <p><b>BRANCO</b> para VOTAR BRANCO</p>
+                        </div>
+
                     </div>
 
-                    <div class="candidate-avatar" id="candidate-avatar">
-                        <span id="candidate-initials">?</span>
-                        <img id="candidate-photo" src="" alt="Foto do candidato">
+                    <div class="urna-bottom">
+
+                        <div class="teclado-area">
+                            <p class="teclado-label">SIMULAÇÃO ELEITORAL</p>
+
+                            <div class="teclado">
+                                <button class="botao" data-digit="1">1</button>
+                                <button class="botao" data-digit="2">2</button>
+                                <button class="botao" data-digit="3">3</button>
+
+                                <button class="botao" data-digit="4">4</button>
+                                <button class="botao" data-digit="5">5</button>
+                                <button class="botao" data-digit="6">6</button>
+
+                                <button class="botao" data-digit="7">7</button>
+                                <button class="botao" data-digit="8">8</button>
+                                <button class="botao" data-digit="9">9</button>
+
+                                <span></span>
+                                <button class="botao" data-digit="0">0</button>
+                                <span></span>
+                            </div>
+                        </div>
+
+                        <div class="botoesinrativos">
+                            <button class="action-key white" id="branco-btn">BRANCO</button>
+                            <button class="action-key orange" id="corrige-btn">CORRIGE</button>
+                            <button class="action-key green" id="confirma-btn">CONFIRMA</button>
+                        </div>
+
                     </div>
 
-                </div>
-
-                <div class="screen-footer">
-                    <p>Aperte a tecla:</p>
-                    <p><b>CONFIRMA</b> para CONFIRMAR este voto</p>
-                    <p><b>CORRIGE</b> para REINICIAR este voto</p>
                 </div>
 
             </div>
 
-            <div class="machine-bottom">
-
-                <div class="keyboard-area">
-                    <p class="keyboard-label">SIMULAÇÃO ELEITORAL</p>
-
-                    <div class="keypad">
-                        <button class="key" data-digit="1">1</button>
-                        <button class="key" data-digit="2">2</button>
-                        <button class="key" data-digit="3">3</button>
-
-                        <button class="key" data-digit="4">4</button>
-                        <button class="key" data-digit="5">5</button>
-                        <button class="key" data-digit="6">6</button>
-
-                        <button class="key" data-digit="7">7</button>
-                        <button class="key" data-digit="8">8</button>
-                        <button class="key" data-digit="9">9</button>
-
-                        <span></span>
-                        <button class="key" data-digit="0">0</button>
-                        <span></span>
-                    </div>
-                </div>
-
-                <div class="action-area">
-                    <button class="action-key white" id="blank-btn">BRANCO</button>
-                    <button class="action-key orange" id="correct-btn">CORRIGE</button>
-                    <button class="action-key green" id="confirm-btn">CONFIRMA</button>
-                </div>
-
-            </div>
-
-            </div>
-
-        </div>
-
-            <aside class="side-panel">
+            <aside class="painellateral">
 
 
-                <div class="panel-card results-card">
-                    <div class="results-heading">
+                <div class="painelResult">
+                    <div class="resultado">
                         <div>
-                            <p class="eyebrow">PARCIAL DA SIMULAÇÃO</p>
+                            <p class="subtitulo">PARCIAL DA SIMULAÇÃO</p>
                             <h3>Votos registrados</h3>
                         </div>
-                        <span class="vote-count" id="total-votes">0</span>
+                        <span class="contadorvotos" id="total-votos">0</span>
                     </div>
 
-                    <div id="results-list" class="results-list">
+                    <div id="listaresultado" class="listaresultado">
                         <p class="empty-results">Os votos aparecerão aqui após a confirmação.</p>
                     </div>
 
-                    <button id="show-results-btn" class="text-button">Ver resumo da votação ↗</button>
+                    <button id="botaodemostrarresultados" class="fechar">Ver resumo da votação ↗</button>
                 </div>
 
             </aside>
 
         </section>
 
-        <section class="notice" id="notice" role="status">
-            <span class="notice-icon">i</span>
+        <section class="notifica" id="notifica" role="status">
+            <span class="aviso">i</span>
             <p>
                 Esta página é apenas um projeto educacional.
                 Os candidatos, partidos e resultados são fictícios.
@@ -139,24 +135,27 @@
     </main>
 
     <footer>
+       
         <span>Projeto educacional · HTML + CSS + JavaScript</span>
     </footer>
 
-    <dialog id="results-dialog" class="results-dialog">
-        <div class="dialog-heading">
+    <dialog id="resultado-dialogo" class="resultado-dialogo">
+        <div class="caixa-dialogo">
             <div>
-                <p class="eyebrow">RESULTADO DA SESSÃO</p>
+                <p class="subtitulo">RESULTADO DA SESSÃO</p>
                 <h2>Resumo da votação</h2>
             </div>
-            <button id="close-dialog" class="close-button">×</button>
+            <button id="fechar-dialogo" class="botao-fechar">×</button>
         </div>
 
-        <div id="dialog-results"></div>
+        <div id="dialogo"></div>
 
  
     </dialog>
 
-    <audio id="vote-sound" src="audios/confirma-urna.mp3"></audio>
+    <audio id="som-surpresa" src="audios/grito-do-xandao.mp3"></audio>
+
+    <audio id="som-urna" src="audios/confirma-urna.mp3"></audio>
 
     <script src="script.js"></script>
 
