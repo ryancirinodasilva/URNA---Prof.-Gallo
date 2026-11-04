@@ -21,7 +21,7 @@ button {
     margin: auto; 
     padding: 24px; 
 }
-.topbar, .intro, .machine-heading, .results-heading, .dialog-heading, footer { 
+.topbar, .intro, .urna-heading, .resultado, .caixa-dialogo, footer { 
     display: flex; 
     justify-content: space-between; 
     align-items: center; 
@@ -51,12 +51,12 @@ button {
 .brand-light, .topbar-label, .intro-text, .steps p, .result-number, .dialog-note { 
     color: var(--m); 
 }
-.topbar-label, .eyebrow, .keyboard-label { 
+.topbar-label, .subtitulo, .teclado-label { 
     font-size: 10px; 
     font-weight: 800; 
     letter-spacing: 1.4px; 
 }
-.eyebrow { 
+.subtitulo { 
     margin: 0 0 10px; 
     color: var(--g); 
 }
@@ -82,7 +82,7 @@ button {
     border-radius: 99px; 
     font-size: 12px; 
 }
-.status-dot, .screen-indicator { 
+.status-dot, .tela-indicator { 
     width: 7px; 
     height: 7px; 
     border-radius: 50%; 
@@ -90,23 +90,23 @@ button {
 }
 
 /* urna */
-.voting-layout {
-    display: grid;
-    grid-template-columns: minmax(0, 1.5fr) minmax(260px, .7fr);
-    gap: 22px;
-    align-items: start;
+.layout-votacao { 
+    display: grid; 
+    grid-template-columns: 1.5fr .7fr; 
+    gap: 22px; 
+    align-items: start; 
 }
-.machine, .panel-card { 
+.urna, .painelResult { 
     padding: 22px; 
     background: #fff; 
     border: 1px solid var(--l); 
     border-radius: 16px; 
 }
-.machine-heading h2, .dialog-heading h2 { 
+.urna-heading h2, .caixa-dialogo h2 { 
     margin: 0; 
     font-size: 23px; 
 }
-.step-badge, .vote-count { 
+.step-badge, .contadorvotos { 
     padding: 9px 11px; 
     background: var(--s); 
     color: var(--g); 
@@ -124,7 +124,7 @@ button {
     border-radius: 12px; 
 }
 
-.screen { 
+.tela { 
     position: relative; 
     display: flex; 
     flex-direction: column; 
@@ -135,7 +135,7 @@ button {
     border-radius: 6px; 
 }
 
-.screen-top {
+.tela-top {
     display: flex;
     justify-content: space-between;
     font-size: 9px;
@@ -143,20 +143,18 @@ button {
     color: #777;
 }
 
-.screen-content {
-    flex: 1;
-    min-width: 0;
-    padding: 16px 4px 4px;
+.tela-content {
+    padding: 16px 110px 4px 4px;
 }
 
-.screen-instruction {
+.tela-instruction {
     margin: 0 0 6px;
     font-size: 10px;
     font-weight: 700;
     color: #606b62;
 }
 
-.screen-content h3 {
+.tela-content h3 {
     margin: 0 0 14px;
     font-size: 22px;
 }
@@ -179,24 +177,21 @@ button {
     font-weight: 700;
 }
 
-.screen-help {
+.tela-help {
     margin: 12px 0 0;
     font-size: 11px;
     color: #7b827b;
 }
 
-.candidate-preview {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
+.candidato-preview {
     flex: 1;
-    min-width: 0;
     padding: 4px;
 }
-.candidate-avatar {
-    position: relative;
-    flex: 0 0 88px;
+
+.candidato-avatar {
+    position: absolute;
+    right: 16px;
+    top: 48px;
     display: grid;
     place-items: center;
     width: 88px;
@@ -206,30 +201,27 @@ button {
     color: var(--g);
     font-size: 30px;
     font-weight: 800;
-    overflow: hidden;
 }
 
-.candidate-details {
+.detalhes-candidato {
     display: flex;
     flex-direction: column;
     gap: 4px;
-    min-width: 0;
-    overflow-wrap: anywhere;
     font-size: 12px;
 }
 
-.screen-footer {
+.tela-footer {
     border-top: 1px solid #ccc;
     padding-top: 8px;
     font-size: 10px;
     color: #555;
 }
 
-.screen-footer p {
+.tela-footer p {
     margin: 2px 0;
 }
 
-.machine-bottom {
+.urna-bottom {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -238,19 +230,19 @@ button {
     border-radius: 8px;
 }
 
-.keyboard-label {
+.teclado-label {
     margin: 0 0 16px;
     color: #d4d8d3;
     text-align: center;
 }
 
-.keypad {
+.teclado {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 8px;
 }
 
-.key,
+.botao,
 .action-key {
     border: 0;
     border-radius: 4px;
@@ -258,14 +250,14 @@ button {
     box-shadow: 0 3px 0 #1d1f1e;
 }
 
-.key {
+.botao {
     min-height: 40px;
     background: #62655f;
     color: #fff;
     font-size: 16px;
 }
 
-.action-area {
+.botoesinrativos {
     display: flex;
     gap: 6px;
     margin-top: 22px;
@@ -289,20 +281,20 @@ button {
     background: #46b370;
 }
 
-.machine-note {
+.urna-note {
     font-size: 10px;
     color: #8a9089;
 }
 
 /* lateral e resultados */
 
-.side-panel {
+.painellateral {
     display: flex;
     flex-direction: column;
     gap: 18px;
 }
 
-.panel-card h3 {
+.painelResult h3 {
     margin: 0;
     font-size: 20px;
 }
@@ -341,11 +333,11 @@ button {
     font-size: 11px;
 }
 
-.vote-count {
+.contadorvotos {
     font-size: 15px;
 }
 
-.results-list {
+.listaresultado {
     margin: 16px 0;
 }
 
@@ -361,7 +353,7 @@ button {
     margin-bottom: 14px;
 }
 
-.result-name {
+.result-nome {
     font-weight: 700;
 }
 
@@ -379,7 +371,7 @@ button {
     background: var(--g);
 }
 
-.text-button {
+.fechar {
     width: 100%;
     padding: 10px 0 0;
     border: 0;
@@ -393,7 +385,7 @@ button {
 
 /* aviso, rodapé e janela */
 
-.notice {
+.notifica {
     display: flex;
     gap: 12px;
     margin-top: 22px;
@@ -405,11 +397,11 @@ button {
     font-size: 11px;
 }
 
-.notice p {
+.notifica p {
     margin: 0;
 }
 
-.notice-icon {
+.aviso {
     flex: 0 0 20px;
     height: 20px;
     border: 1px solid #a7b3a7;
@@ -424,22 +416,22 @@ footer {
     font-size: 10px;
 }
 
-.results-dialog {
+.resultado-dialogo {
     width: min(460px, 92%);
     padding: 25px;
     border: 1px solid var(--l);
     border-radius: 15px;
 }
 
-.results-dialog::backdrop {
+.resultado-dialogo::backdrop {
     background: #17291e70;
 }
 
-.dialog-heading {
+.caixa-dialogo {
     margin-bottom: 16px;
 }
 
-.close-button {
+.botao-fechar {
     width: 34px;
     height: 34px;
     border: 0;
@@ -456,42 +448,14 @@ footer {
     font-size: 13px;
 }
 
-@media (max-width: 650px) {
-    .voting-layout {
+@media (max-width: 850px) {
+    .layout-votacao,
+    .urna-body {
         grid-template-columns: 1fr;
     }
 
-    .urna-body {
-        grid-template-columns: 1.5fr 1fr;
-    }
-
-    .candidate-avatar {
+    .candidato-avatar {
         width: 74px;
         height: 92px;
     }
-}
-
-.candidate-preview {
-    width: 100%;
-}
-
-.candidate-avatar img {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: inherit;
-    display: none;
-}
-
-.machine-heading {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 15px;
-}
-
-.machine-heading .candidate-avatar {
-    flex-shrink: 0;
 }
